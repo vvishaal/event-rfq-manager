@@ -1,0 +1,671 @@
+/**
+ * Public Form CSS
+ *
+ * @package Event_RFQ_Manager
+ */
+
+/* ========================================
+   Form Container
+   ======================================== */
+
+.erfq-form-container {
+    max-width: 100%;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.erfq-form {
+    margin: 0;
+    padding: 0;
+}
+
+/* ========================================
+   Form Row & Fields
+   ======================================== */
+
+.erfq-form-row {
+    margin-bottom: 20px;
+}
+
+.erfq-form-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Field widths */
+.erfq-field-width-100 { width: 100%; }
+.erfq-field-width-75 { width: 75%; }
+.erfq-field-width-66 { width: 66.666%; }
+.erfq-field-width-50 { width: 50%; }
+.erfq-field-width-33 { width: 33.333%; }
+.erfq-field-width-25 { width: 25%; }
+
+/* Inline fields row */
+.erfq-inline-fields {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+
+.erfq-inline-fields .erfq-form-row {
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   Labels & Descriptions
+   ======================================== */
+
+.erfq-field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1a1a1a;
+}
+
+.erfq-required-indicator {
+    color: #dc3545;
+    margin-left: 3px;
+}
+
+.erfq-field-description {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* ========================================
+   Input Fields
+   ======================================== */
+
+.erfq-input,
+.erfq-textarea,
+.erfq-select {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 16px;
+    font-family: inherit;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+}
+
+.erfq-input:focus,
+.erfq-textarea:focus,
+.erfq-select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.erfq-input::placeholder,
+.erfq-textarea::placeholder {
+    color: #9ca3af;
+}
+
+.erfq-input:disabled,
+.erfq-textarea:disabled,
+.erfq-select:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+}
+
+/* Textarea */
+.erfq-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Select */
+.erfq-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+/* ========================================
+   Checkboxes & Radio Buttons
+   ======================================== */
+
+.erfq-checkbox-group,
+.erfq-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.erfq-checkbox-group.erfq-inline,
+.erfq-radio-group.erfq-inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.erfq-checkbox-label,
+.erfq-radio-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.erfq-checkbox,
+.erfq-radio {
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0 0;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* ========================================
+   File Upload
+   ======================================== */
+
+.erfq-file-upload {
+    position: relative;
+}
+
+.erfq-file-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.erfq-file-dropzone:hover,
+.erfq-file-dropzone.erfq-dragover {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.erfq-file-icon {
+    font-size: 32px;
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+
+.erfq-file-text {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.erfq-file-text strong {
+    color: #2563eb;
+}
+
+.erfq-file-info {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.erfq-file-input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+/* File preview */
+.erfq-file-preview {
+    margin-top: 15px;
+}
+
+.erfq-file-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.erfq-file-item:last-child {
+    margin-bottom: 0;
+}
+
+.erfq-file-item-icon {
+    font-size: 20px;
+    color: #6b7280;
+}
+
+.erfq-file-item-name {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.erfq-file-item-size {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.erfq-file-remove {
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.erfq-file-remove:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   Address Field
+   ======================================== */
+
+.erfq-address-fields {
+    display: grid;
+    gap: 15px;
+}
+
+.erfq-address-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.erfq-address-field-full {
+    grid-column: 1 / -1;
+}
+
+/* ========================================
+   Date & Time Pickers
+   ======================================== */
+
+.erfq-date-input,
+.erfq-time-input {
+    position: relative;
+}
+
+.erfq-date-input input,
+.erfq-time-input input {
+    padding-right: 40px;
+}
+
+/* ========================================
+   Repeater Field
+   ======================================== */
+
+.erfq-repeater {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 15px;
+    background: #fafafa;
+}
+
+.erfq-repeater-rows {
+    margin-bottom: 15px;
+}
+
+.erfq-repeater-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.erfq-repeater-row:last-child {
+    margin-bottom: 0;
+}
+
+.erfq-repeater-fields {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.erfq-repeater-fields .erfq-form-row {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 150px;
+}
+
+.erfq-repeater-remove {
+    padding: 8px 12px;
+    border: 1px solid #dc3545;
+    background: none;
+    color: #dc3545;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.erfq-repeater-remove:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
+.erfq-repeater-add {
+    padding: 10px 16px;
+    border: 1px dashed #d1d5db;
+    background: #fff;
+    color: #666;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    transition: all 0.15s ease;
+}
+
+.erfq-repeater-add:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+/* ========================================
+   Multi-Step Form
+   ======================================== */
+
+.erfq-multistep-form .erfq-form-step {
+    display: none;
+}
+
+.erfq-multistep-form .erfq-form-step.active {
+    display: block;
+}
+
+/* Progress Bar */
+.erfq-progress {
+    margin-bottom: 30px;
+}
+
+.erfq-progress-bar {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.erfq-progress-fill {
+    height: 100%;
+    background: #2563eb;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.erfq-progress-steps {
+    display: flex;
+    justify-content: space-between;
+}
+
+.erfq-progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.erfq-progress-step.active,
+.erfq-progress-step.completed {
+    color: #2563eb;
+}
+
+.erfq-progress-step-number {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5e7eb;
+    border-radius: 50%;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.erfq-progress-step.active .erfq-progress-step-number,
+.erfq-progress-step.completed .erfq-progress-step-number {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* Step Navigation */
+.erfq-step-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.erfq-step-prev,
+.erfq-step-next {
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.erfq-step-prev {
+    background: #fff;
+    border: 1px solid #d1d5db;
+    color: #333;
+}
+
+.erfq-step-prev:hover {
+    background: #f3f4f6;
+}
+
+.erfq-step-next {
+    background: #2563eb;
+    border: 1px solid #2563eb;
+    color: #fff;
+}
+
+.erfq-step-next:hover {
+    background: #1d4ed8;
+}
+
+/* ========================================
+   Submit Button
+   ======================================== */
+
+.erfq-submit-row {
+    margin-top: 25px;
+}
+
+.erfq-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: #2563eb;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.erfq-submit-btn:hover {
+    background: #1d4ed8;
+}
+
+.erfq-submit-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.erfq-submit-btn .erfq-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: erfq-spin 0.8s linear infinite;
+}
+
+.erfq-submit-btn.erfq-loading .erfq-spinner {
+    display: block;
+}
+
+@keyframes erfq-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Messages
+   ======================================== */
+
+.erfq-message {
+    padding: 15px 18px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.erfq-message-success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.erfq-message-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.erfq-message-info {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+/* ========================================
+   Field Errors
+   ======================================== */
+
+.erfq-form-row.erfq-has-error .erfq-input,
+.erfq-form-row.erfq-has-error .erfq-textarea,
+.erfq-form-row.erfq-has-error .erfq-select {
+    border-color: #dc3545;
+}
+
+.erfq-form-row.erfq-has-error .erfq-input:focus,
+.erfq-form-row.erfq-has-error .erfq-textarea:focus,
+.erfq-form-row.erfq-has-error .erfq-select:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
+}
+
+.erfq-field-error {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #dc3545;
+}
+
+/* ========================================
+   Conditional Logic (Hidden Fields)
+   ======================================== */
+
+.erfq-field-hidden {
+    display: none !important;
+}
+
+/* ========================================
+   Honeypot
+   ======================================== */
+
+.erfq-hp-field {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media screen and (max-width: 768px) {
+    .erfq-inline-fields {
+        flex-direction: column;
+    }
+
+    .erfq-inline-fields .erfq-form-row {
+        width: 100% !important;
+    }
+
+    .erfq-field-width-75,
+    .erfq-field-width-66,
+    .erfq-field-width-50,
+    .erfq-field-width-33,
+    .erfq-field-width-25 {
+        width: 100%;
+    }
+
+    .erfq-address-row {
+        grid-template-columns: 1fr;
+    }
+
+    .erfq-repeater-row {
+        flex-direction: column;
+    }
+
+    .erfq-repeater-remove {
+        width: 100%;
+    }
+
+    .erfq-step-navigation {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .erfq-step-prev,
+    .erfq-step-next {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .erfq-submit-btn {
+        width: 100%;
+    }
+}

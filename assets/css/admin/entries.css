@@ -1,0 +1,376 @@
+/**
+ * Admin Entries CSS
+ *
+ * @package Event_RFQ_Manager
+ */
+
+/* ========================================
+   Entry Detail Page
+   ======================================== */
+
+.erfq-entry-detail-wrap {
+    max-width: 1400px;
+}
+
+.erfq-entry-detail {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.erfq-entry-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.erfq-entry-sidebar {
+    width: 320px;
+    flex-shrink: 0;
+}
+
+/* Cards */
+.erfq-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    margin-bottom: 20px;
+}
+
+.erfq-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+    background: #f6f7f7;
+}
+
+.erfq-card-header h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.erfq-card-body {
+    padding: 16px;
+}
+
+/* Data Table */
+.erfq-data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.erfq-data-table th,
+.erfq-data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f1;
+    text-align: left;
+    vertical-align: top;
+}
+
+.erfq-data-table th {
+    width: 30%;
+    font-weight: 600;
+    color: #1d2327;
+    background: #f9f9f9;
+}
+
+.erfq-data-table tr:last-child th,
+.erfq-data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.erfq-no-data {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Files */
+.erfq-files-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.erfq-file-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.erfq-file-item:last-child {
+    border-bottom: none;
+}
+
+.erfq-file-icon {
+    font-size: 24px;
+    color: #666;
+}
+
+.erfq-file-info {
+    flex: 1;
+}
+
+.erfq-file-name {
+    display: block;
+    font-weight: 500;
+    color: #2271b1;
+    text-decoration: none;
+}
+
+.erfq-file-name:hover {
+    text-decoration: underline;
+}
+
+.erfq-file-meta {
+    font-size: 12px;
+    color: #666;
+}
+
+.erfq-file-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #2271b1;
+    text-decoration: none;
+    margin-bottom: 4px;
+}
+
+.erfq-file-link:hover {
+    text-decoration: underline;
+}
+
+.erfq-file-link .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Notes */
+.erfq-notes-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.erfq-note {
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.erfq-note:last-child {
+    margin-bottom: 0;
+}
+
+.erfq-note-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 12px;
+}
+
+.erfq-note-author {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.erfq-note-date {
+    color: #666;
+}
+
+.erfq-note-content {
+    color: #3c434a;
+    line-height: 1.5;
+}
+
+.erfq-no-notes {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.erfq-add-note {
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.erfq-add-note textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+
+.erfq-add-note textarea:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+/* Sidebar Cards */
+.erfq-entry-status-card .erfq-status-select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+.erfq-entry-status-card .button {
+    width: 100%;
+}
+
+.erfq-info-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.erfq-info-list li {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.erfq-info-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.erfq-info-list li:first-child {
+    padding-top: 0;
+}
+
+.erfq-info-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.erfq-info-value {
+    color: #1d2327;
+    word-break: break-word;
+}
+
+.erfq-info-value a {
+    color: #2271b1;
+    text-decoration: none;
+}
+
+.erfq-info-value a:hover {
+    text-decoration: underline;
+}
+
+.erfq-user-agent {
+    font-size: 11px;
+    color: #666;
+    max-height: 60px;
+    overflow: hidden;
+}
+
+/* Actions Card */
+.erfq-entry-actions-card .erfq-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.erfq-entry-actions-card .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.erfq-entry-actions-card .erfq-delete-entry {
+    color: #d63638;
+    border-color: #d63638;
+}
+
+.erfq-entry-actions-card .erfq-delete-entry:hover {
+    background: #d63638;
+    color: #fff;
+}
+
+/* ========================================
+   Entry List Status Badges
+   ======================================== */
+
+.erfq-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.erfq-status-new {
+    background: #e1f5fe;
+    color: #0277bd;
+}
+
+.erfq-status-read {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.erfq-status-processed {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.erfq-status-spam {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media screen and (max-width: 960px) {
+    .erfq-entry-detail {
+        flex-direction: column;
+    }
+
+    .erfq-entry-sidebar {
+        width: 100%;
+    }
+
+    .erfq-data-table th {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .erfq-data-table th,
+    .erfq-data-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .erfq-data-table th {
+        padding-bottom: 5px;
+        border-bottom: none;
+        background: none;
+    }
+
+    .erfq-data-table td {
+        padding-top: 0;
+        padding-bottom: 15px;
+    }
+}
