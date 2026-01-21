@@ -20,7 +20,11 @@ class ERFQ_Migrator {
      * Check if migration is needed and run if so
      */
     public function maybe_migrate() {
-        // Skip if already migrated
+        // Always register handlers for migration actions
+        add_action('admin_post_erfq_run_migration', array($this, 'run_migration'));
+        add_action('admin_post_erfq_skip_migration', array($this, 'skip_migration'));
+
+        // Skip notice if already migrated
         if (get_option('erfq_migrated_v1')) {
             return;
         }
@@ -75,10 +79,6 @@ class ERFQ_Migrator {
             </p>
         </div>
         <?php
-
-        // Register handlers
-        add_action('admin_post_erfq_run_migration', array($this, 'run_migration'));
-        add_action('admin_post_erfq_skip_migration', array($this, 'skip_migration'));
     }
 
     /**

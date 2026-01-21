@@ -156,13 +156,19 @@ class ERFQ_Field_Registry {
         foreach ($this->field_types as $type => $class) {
             $instance = $this->get($type);
             if ($instance) {
+                $settings = $instance->get_settings_schema();
                 $result[$type] = array(
-                    'type'        => $type,
-                    'name'        => $instance->get_name(),
-                    'icon'        => $instance->get_icon(),
-                    'category'    => $instance->get_category(),
-                    'description' => $instance->get_description(),
-                    'settings'    => $instance->get_settings_schema(),
+                    'type'                => $type,
+                    'label'               => $instance->get_name(),
+                    'name'                => $instance->get_name(),
+                    'icon'                => $instance->get_icon(),
+                    'category'            => $instance->get_category(),
+                    'description'         => $instance->get_description(),
+                    'settings'            => $settings,
+                    'supports_options'    => in_array($type, array('select', 'checkbox', 'radio'), true),
+                    'supports_placeholder'=> !in_array($type, array('checkbox', 'radio', 'file', 'hidden'), true),
+                    'supports_default'    => !in_array($type, array('file', 'repeater'), true),
+                    'supports_min_max'    => in_array($type, array('number', 'textarea'), true),
                 );
             }
         }

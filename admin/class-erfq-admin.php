@@ -71,23 +71,7 @@ class ERFQ_Admin {
         wp_enqueue_script(
             'erfq-form-builder',
             ERFQ_PLUGIN_URL . 'assets/js/admin/form-builder.js',
-            array('jquery', 'jquery-ui-sortable', 'wp-util'),
-            ERFQ_VERSION,
-            true
-        );
-
-        wp_enqueue_script(
-            'erfq-field-manager',
-            ERFQ_PLUGIN_URL . 'assets/js/admin/field-manager.js',
-            array('jquery', 'erfq-form-builder'),
-            ERFQ_VERSION,
-            true
-        );
-
-        wp_enqueue_script(
-            'erfq-conditional-logic',
-            ERFQ_PLUGIN_URL . 'assets/js/admin/conditional-logic.js',
-            array('jquery', 'erfq-form-builder'),
+            array('jquery', 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable', 'wp-util'),
             ERFQ_VERSION,
             true
         );
