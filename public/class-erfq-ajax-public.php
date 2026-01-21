@@ -86,17 +86,20 @@ class ERFQ_Ajax_Public {
 
         // Honeypot check
         if (!empty($settings['honeypot_enabled']) || get_option('erfq_honeypot_enabled', '1') === '1') {
-            $honeypot = new ERFQ_Honeypot();
-            if (!$honeypot->validate($_POST)) {
+            if (!ERFQ_Honeypot::validate($_POST)) {
                 return new WP_Error('spam_detected', __('Spam submission detected.', 'event-rfq-manager'));
             }
         }
 
-        // Rate limiting check
+        // Rate limiting check - skip if table doesn't exist yet
         if (get_option('erfq_rate_limit_enabled', '1') === '1') {
-            $rate_limiter = new ERFQ_Rate_Limiter();
-            if (!$rate_limiter->check()) {
-                return new WP_Error('rate_limited', __('Too many submissions. Please try again later.', 'event-rfq-manager'));
+            try {
+                $rate_limiter = new ERFQ_Rate_Limiter();
+                if (!$rate_limiter->check($form->get_id())) {
+                    return new WP_Error('rate_limited', __('Too many submissions. Please try again later.', 'event-rfq-manager'));
+                }
+            } catch (Exception $e) {
+                // Rate limiter table might not exist, skip check
             }
         }
 
