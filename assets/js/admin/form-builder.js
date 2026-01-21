@@ -129,6 +129,15 @@
             $(document).on('change', '.erfq-conditional-rule select, .erfq-conditional-rule input', function() {
                 self.updateConditions();
             });
+
+            // Repeater sub-fields management
+            $(document).on('click', '.erfq-add-sub-field', function() { self.addSubField(); });
+            $(document).on('click', '.erfq-remove-sub-field', function() {
+                self.removeSubField($(this).closest('.erfq-sub-field-row').data('index'));
+            });
+            $(document).on('change', '.erfq-sub-field-row input, .erfq-sub-field-row select', function() {
+                self.updateSubFields();
+            });
         },
 
         initTopBar: function() {
@@ -163,6 +172,21 @@
                 conditional_logic: 'all',
                 conditional_rules: []
             };
+
+            // Add type-specific defaults
+            if (type === 'section') {
+                field.heading_tag = 'h3';
+                field.show_divider = true;
+                field.label = 'Section Title';
+            } else if (type === 'html') {
+                field.html_content = '<p>Enter your custom HTML content here.</p>';
+                field.label = 'HTML Content';
+            } else if (type === 'repeater') {
+                field.sub_fields = [{id: 'item', type: 'text', label: 'Item'}];
+                field.min_rows = 0;
+                field.max_rows = 10;
+                field.add_button_text = '+ Add Row';
+            }
 
             if (typeof index !== 'undefined') {
                 this.formData.fields.splice(index, 0, field);
@@ -232,6 +256,20 @@
                 case 'date': html = '<input type="text" disabled placeholder="Select date...">'; break;
                 case 'time': html = '<input type="text" disabled placeholder="Select time...">'; break;
                 case 'file': html = '<div class="erfq-file-preview"><span class="dashicons dashicons-upload"></span> Choose file</div>'; break;
+                case 'section':
+                    var tag = field.heading_tag || 'h3';
+                    html = '<div class="erfq-section-preview' + (field.show_divider ? ' erfq-has-divider' : '') + '">';
+                    html += '<' + tag + '>' + (field.label || 'Section Title') + '</' + tag + '>';
+                    if (field.description) html += '<p class="description">' + field.description + '</p>';
+                    html += '</div>';
+                    break;
+                case 'html':
+                    html = '<div class="erfq-html-preview">' + (field.html_content || '<em>HTML content will appear here</em>') + '</div>';
+                    break;
+                case 'repeater':
+                    html = '<div class="erfq-repeater-preview"><span class="dashicons dashicons-list-view"></span> Repeater: ';
+                    html += (field.sub_fields || []).length + ' sub-field(s)</div>';
+                    break;
                 default: html = '<input type="text" disabled>';
             }
             $container.html(html);
@@ -250,7 +288,18 @@
 
         renderFieldSettings: function(field) {
             var fieldMeta = erfqAdmin.fieldTypes[field.type] || {};
-            var template = wp.template('erfq-field-settings');
+            var templateName = 'erfq-field-settings';
+
+            // Use special templates for layout fields
+            if (field.type === 'section') {
+                templateName = 'erfq-section-settings';
+            } else if (field.type === 'html') {
+                templateName = 'erfq-html-settings';
+            } else if (field.type === 'repeater') {
+                templateName = 'erfq-repeater-settings';
+            }
+
+            var template = wp.template(templateName);
             var $settings = $(template($.extend({}, field, {
                 icon: fieldMeta.icon || 'dashicons-admin-generic',
                 type_label: fieldMeta.label || field.type,
@@ -389,6 +438,42 @@
             });
             field.conditional_rules = rules;
             this.hasUnsavedChanges = true;
+        },
+
+        addSubField: function() {
+            var field = this.getFieldById(this.selectedFieldId);
+            if (!field || field.type !== 'repeater') return;
+            if (!field.sub_fields) field.sub_fields = [];
+            var index = field.sub_fields.length + 1;
+            field.sub_fields.push({ id: 'field_' + index, type: 'text', label: 'Field ' + index });
+            this.hasUnsavedChanges = true;
+            this.renderFieldSettings(field);
+            this.renderFields();
+        },
+
+        removeSubField: function(index) {
+            var field = this.getFieldById(this.selectedFieldId);
+            if (!field || !field.sub_fields) return;
+            field.sub_fields.splice(index, 1);
+            this.hasUnsavedChanges = true;
+            this.renderFieldSettings(field);
+            this.renderFields();
+        },
+
+        updateSubFields: function() {
+            var field = this.getFieldById(this.selectedFieldId);
+            if (!field || field.type !== 'repeater') return;
+            var subFields = [];
+            $('.erfq-sub-field-row').each(function() {
+                subFields.push({
+                    id: $(this).find('.erfq-sub-field-id').val(),
+                    type: $(this).find('.erfq-sub-field-type').val(),
+                    label: $(this).find('.erfq-sub-field-label').val()
+                });
+            });
+            field.sub_fields = subFields;
+            this.hasUnsavedChanges = true;
+            this.renderFields();
         },
 
         saveForm: function() {

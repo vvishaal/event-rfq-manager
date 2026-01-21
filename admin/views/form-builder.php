@@ -457,6 +457,198 @@ if (!defined('ABSPATH')) {
         </div>
     </script>
 
+    <!-- Section Field Settings Template -->
+    <script type="text/template" id="tmpl-erfq-section-settings">
+        <div class="erfq-field-settings-header">
+            <span class="erfq-field-type-icon dashicons {{ data.icon }}"></span>
+            <span class="erfq-field-type-name">{{ data.type_label }}</span>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Section Settings', 'event-rfq-manager'); ?></h4>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-label"><?php esc_html_e('Section Title', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-label" class="erfq-field-setting" data-setting="label" value="{{ data.label }}">
+            </div>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-description"><?php esc_html_e('Description', 'event-rfq-manager'); ?></label>
+                <textarea id="erfq-field-description" class="erfq-field-setting" data-setting="description" rows="2">{{ data.description }}</textarea>
+            </div>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-heading-tag"><?php esc_html_e('Heading Tag', 'event-rfq-manager'); ?></label>
+                <select id="erfq-field-heading-tag" class="erfq-field-setting" data-setting="heading_tag">
+                    <option value="h2" <# if (data.heading_tag === 'h2') { #>selected<# } #>>H2</option>
+                    <option value="h3" <# if (data.heading_tag === 'h3') { #>selected<# } #>>H3</option>
+                    <option value="h4" <# if (data.heading_tag === 'h4') { #>selected<# } #>>H4</option>
+                    <option value="h5" <# if (data.heading_tag === 'h5') { #>selected<# } #>>H5</option>
+                </select>
+            </div>
+
+            <div class="erfq-setting-row">
+                <label>
+                    <input type="checkbox" class="erfq-field-setting" data-setting="show_divider" <# if (data.show_divider) { #>checked<# } #>>
+                    <?php esc_html_e('Show divider line', 'event-rfq-manager'); ?>
+                </label>
+            </div>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Appearance', 'event-rfq-manager'); ?></h4>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-css"><?php esc_html_e('CSS Class', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-css" class="erfq-field-setting" data-setting="css_class" value="{{ data.css_class }}">
+            </div>
+        </div>
+
+        <div class="erfq-field-actions">
+            <button type="button" class="button erfq-duplicate-field">
+                <span class="dashicons dashicons-admin-page"></span>
+                <?php esc_html_e('Duplicate', 'event-rfq-manager'); ?>
+            </button>
+            <button type="button" class="button erfq-delete-field">
+                <span class="dashicons dashicons-trash"></span>
+                <?php esc_html_e('Delete', 'event-rfq-manager'); ?>
+            </button>
+        </div>
+    </script>
+
+    <!-- HTML Field Settings Template -->
+    <script type="text/template" id="tmpl-erfq-html-settings">
+        <div class="erfq-field-settings-header">
+            <span class="erfq-field-type-icon dashicons {{ data.icon }}"></span>
+            <span class="erfq-field-type-name">{{ data.type_label }}</span>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('HTML Content', 'event-rfq-manager'); ?></h4>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-label"><?php esc_html_e('Label (for reference)', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-label" class="erfq-field-setting" data-setting="label" value="{{ data.label }}">
+            </div>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-html-content"><?php esc_html_e('HTML Content', 'event-rfq-manager'); ?></label>
+                <textarea id="erfq-field-html-content" class="erfq-field-setting erfq-code-editor" data-setting="html_content" rows="8">{{ data.html_content }}</textarea>
+                <p class="description"><?php esc_html_e('Enter HTML content. Basic HTML tags are allowed.', 'event-rfq-manager'); ?></p>
+            </div>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Appearance', 'event-rfq-manager'); ?></h4>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-css"><?php esc_html_e('CSS Class', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-css" class="erfq-field-setting" data-setting="css_class" value="{{ data.css_class }}">
+            </div>
+        </div>
+
+        <div class="erfq-field-actions">
+            <button type="button" class="button erfq-duplicate-field">
+                <span class="dashicons dashicons-admin-page"></span>
+                <?php esc_html_e('Duplicate', 'event-rfq-manager'); ?>
+            </button>
+            <button type="button" class="button erfq-delete-field">
+                <span class="dashicons dashicons-trash"></span>
+                <?php esc_html_e('Delete', 'event-rfq-manager'); ?>
+            </button>
+        </div>
+    </script>
+
+    <!-- Repeater Field Settings Template -->
+    <script type="text/template" id="tmpl-erfq-repeater-settings">
+        <div class="erfq-field-settings-header">
+            <span class="erfq-field-type-icon dashicons {{ data.icon }}"></span>
+            <span class="erfq-field-type-name">{{ data.type_label }}</span>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Basic Settings', 'event-rfq-manager'); ?></h4>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-label"><?php esc_html_e('Label', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-label" class="erfq-field-setting" data-setting="label" value="{{ data.label }}">
+            </div>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-description"><?php esc_html_e('Description', 'event-rfq-manager'); ?></label>
+                <textarea id="erfq-field-description" class="erfq-field-setting" data-setting="description" rows="2">{{ data.description }}</textarea>
+            </div>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Repeater Options', 'event-rfq-manager'); ?></h4>
+
+            <div class="erfq-setting-row erfq-inline-settings">
+                <div>
+                    <label for="erfq-field-min-rows"><?php esc_html_e('Min Rows', 'event-rfq-manager'); ?></label>
+                    <input type="number" id="erfq-field-min-rows" class="erfq-field-setting" data-setting="min_rows" value="{{ data.min_rows }}" min="0">
+                </div>
+                <div>
+                    <label for="erfq-field-max-rows"><?php esc_html_e('Max Rows', 'event-rfq-manager'); ?></label>
+                    <input type="number" id="erfq-field-max-rows" class="erfq-field-setting" data-setting="max_rows" value="{{ data.max_rows }}" min="1">
+                </div>
+            </div>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-add-text"><?php esc_html_e('Add Button Text', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-add-text" class="erfq-field-setting" data-setting="add_button_text" value="{{ data.add_button_text }}">
+            </div>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Sub-Fields', 'event-rfq-manager'); ?></h4>
+            <p class="description"><?php esc_html_e('Define fields that will repeat in each row.', 'event-rfq-manager'); ?></p>
+
+            <div class="erfq-sub-fields-list">
+                <# _.each(data.sub_fields || [], function(subField, index) { #>
+                <div class="erfq-sub-field-row" data-index="{{ index }}">
+                    <input type="text" class="erfq-sub-field-id" value="{{ subField.id }}" placeholder="<?php esc_attr_e('Field ID', 'event-rfq-manager'); ?>">
+                    <select class="erfq-sub-field-type">
+                        <option value="text" <# if (subField.type === 'text') { #>selected<# } #>><?php esc_html_e('Text', 'event-rfq-manager'); ?></option>
+                        <option value="email" <# if (subField.type === 'email') { #>selected<# } #>><?php esc_html_e('Email', 'event-rfq-manager'); ?></option>
+                        <option value="number" <# if (subField.type === 'number') { #>selected<# } #>><?php esc_html_e('Number', 'event-rfq-manager'); ?></option>
+                        <option value="select" <# if (subField.type === 'select') { #>selected<# } #>><?php esc_html_e('Select', 'event-rfq-manager'); ?></option>
+                        <option value="date" <# if (subField.type === 'date') { #>selected<# } #>><?php esc_html_e('Date', 'event-rfq-manager'); ?></option>
+                    </select>
+                    <input type="text" class="erfq-sub-field-label" value="{{ subField.label }}" placeholder="<?php esc_attr_e('Label', 'event-rfq-manager'); ?>">
+                    <button type="button" class="erfq-remove-sub-field" title="<?php esc_attr_e('Remove', 'event-rfq-manager'); ?>">
+                        <span class="dashicons dashicons-no-alt"></span>
+                    </button>
+                </div>
+                <# }); #>
+            </div>
+            <button type="button" class="button erfq-add-sub-field">
+                <span class="dashicons dashicons-plus"></span>
+                <?php esc_html_e('Add Sub-Field', 'event-rfq-manager'); ?>
+            </button>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Appearance', 'event-rfq-manager'); ?></h4>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-css"><?php esc_html_e('CSS Class', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-css" class="erfq-field-setting" data-setting="css_class" value="{{ data.css_class }}">
+            </div>
+        </div>
+
+        <div class="erfq-field-actions">
+            <button type="button" class="button erfq-duplicate-field">
+                <span class="dashicons dashicons-admin-page"></span>
+                <?php esc_html_e('Duplicate', 'event-rfq-manager'); ?>
+            </button>
+            <button type="button" class="button erfq-delete-field">
+                <span class="dashicons dashicons-trash"></span>
+                <?php esc_html_e('Delete', 'event-rfq-manager'); ?>
+            </button>
+        </div>
+    </script>
+
     <!-- Hidden form data -->
     <input type="hidden" id="erfq-form-data" value="<?php echo esc_attr(json_encode($form_data)); ?>">
 </div>

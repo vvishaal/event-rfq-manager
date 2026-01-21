@@ -609,6 +609,76 @@
 }
 
 /* ========================================
+   Section Field
+   ======================================== */
+
+.erfq-section {
+    margin: 25px 0 20px;
+    padding-bottom: 10px;
+}
+
+.erfq-section:first-child {
+    margin-top: 0;
+}
+
+.erfq-section-divider {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.erfq-section-title {
+    margin: 0 0 8px;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.erfq-section-title.h2 { font-size: 22px; }
+.erfq-section-title.h3 { font-size: 18px; }
+.erfq-section-title.h4 { font-size: 16px; }
+.erfq-section-title.h5 { font-size: 14px; }
+
+.erfq-section-description {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* ========================================
+   HTML Field
+   ======================================== */
+
+.erfq-html-content {
+    margin: 15px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.erfq-html-content p {
+    margin: 0 0 15px;
+}
+
+.erfq-html-content p:last-child {
+    margin-bottom: 0;
+}
+
+.erfq-html-content a {
+    color: #2563eb;
+}
+
+.erfq-html-content ul,
+.erfq-html-content ol {
+    margin: 0 0 15px;
+    padding-left: 25px;
+}
+
+.erfq-html-content li {
+    margin-bottom: 5px;
+}
+
+/* ========================================
    Honeypot
    ======================================== */
 

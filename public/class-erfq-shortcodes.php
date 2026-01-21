@@ -63,8 +63,8 @@ class ERFQ_Shortcodes {
         $this->enqueue_form_assets($form);
 
         // Render form
-        $renderer = new ERFQ_Form_Renderer($form);
-        return $renderer->render($atts['class']);
+        $renderer = new ERFQ_Form_Renderer();
+        return $renderer->render($form, array('class' => $atts['class']));
     }
 
     /**
