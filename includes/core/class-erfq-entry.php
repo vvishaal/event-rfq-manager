@@ -614,4 +614,25 @@ class ERFQ_Entry {
 
         return $counts;
     }
+
+    /**
+     * Count entries for a specific form
+     *
+     * @param int $form_id Form ID
+     *
+     * @return int Entry count
+     */
+    public static function count_by_form($form_id) {
+        global $wpdb;
+
+        return (int) $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->posts} p
+            INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+            WHERE p.post_type = 'erfq_entry'
+            AND p.post_status = 'publish'
+            AND pm.meta_key = '_erfq_entry_form_id'
+            AND pm.meta_value = %d",
+            $form_id
+        ));
+    }
 }
