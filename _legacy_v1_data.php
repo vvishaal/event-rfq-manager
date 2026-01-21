@@ -1,15 +1,11 @@
 <?php
 /**
- * Plugin Name: Event RFQ Manager
- * Plugin URI: https://yourwebsite.com/event-rfq-manager
- * Description: Comprehensive event quotation request management system for venues, accommodation, conference setups, and services
- * Version: 1.0.0
- * Author: Vishal Claode
- * Author URI: https://yourwebsite.com
- * License: GPL v2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: event-rfq-manager
- * Domain Path: /languages
+ * Legacy v1.0 Data Handler
+ *
+ * This file contains the v1.0 code structure for reference during migration.
+ * NOT A PLUGIN - WordPress will not detect this as a separate plugin.
+ *
+ * @package Event_RFQ_Manager
  */
 
 // If this file is called directly, abort.

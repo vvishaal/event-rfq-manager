@@ -146,6 +146,8 @@ class ERFQ_Loader {
             'file'     => ERFQ_PLUGIN_DIR . 'includes/fields/class-erfq-field-file.php',
             'hidden'   => ERFQ_PLUGIN_DIR . 'includes/fields/class-erfq-field-hidden.php',
             'repeater' => ERFQ_PLUGIN_DIR . 'includes/fields/class-erfq-field-repeater.php',
+            'section'  => ERFQ_PLUGIN_DIR . 'includes/fields/class-erfq-field-section.php',
+            'html'     => ERFQ_PLUGIN_DIR . 'includes/fields/class-erfq-field-html.php',
         );
 
         foreach ($field_types as $type => $file) {
@@ -169,6 +171,8 @@ class ERFQ_Loader {
         $registry->register('file', 'ERFQ_Field_File');
         $registry->register('hidden', 'ERFQ_Field_Hidden');
         $registry->register('repeater', 'ERFQ_Field_Repeater');
+        $registry->register('section', 'ERFQ_Field_Section');
+        $registry->register('html', 'ERFQ_Field_HTML');
 
         // Allow plugins to register custom field types
         do_action('erfq_register_field_types', $registry);
