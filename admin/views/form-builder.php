@@ -575,6 +575,16 @@ if (!defined('ABSPATH')) {
             </div>
 
             <div class="erfq-setting-row">
+                <label for="erfq-field-name"><?php esc_html_e('Field Name (ID)', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-name" class="erfq-field-setting" data-setting="id" value="{{ data.id }}" pattern="[a-z0-9_-]+">
+            </div>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-placeholder"><?php esc_html_e('Placeholder', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-placeholder" class="erfq-field-setting" data-setting="placeholder" value="{{ data.placeholder }}">
+            </div>
+
+            <div class="erfq-setting-row">
                 <label for="erfq-field-description"><?php esc_html_e('Description', 'event-rfq-manager'); ?></label>
                 <textarea id="erfq-field-description" class="erfq-field-setting" data-setting="description" rows="2">{{ data.description }}</textarea>
             </div>
@@ -583,13 +593,25 @@ if (!defined('ABSPATH')) {
         <div class="erfq-setting-group">
             <h4><?php esc_html_e('Repeater Options', 'event-rfq-manager'); ?></h4>
 
+            <div class="erfq-setting-row">
+                <label for="erfq-field-field-type"><?php esc_html_e('Input Type', 'event-rfq-manager'); ?></label>
+                <select id="erfq-field-field-type" class="erfq-field-setting" data-setting="field_type">
+                    <option value="text" <# if (data.field_type === 'text') { #>selected<# } #>><?php esc_html_e('Text', 'event-rfq-manager'); ?></option>
+                    <option value="email" <# if (data.field_type === 'email') { #>selected<# } #>><?php esc_html_e('Email', 'event-rfq-manager'); ?></option>
+                    <option value="phone" <# if (data.field_type === 'phone') { #>selected<# } #>><?php esc_html_e('Phone', 'event-rfq-manager'); ?></option>
+                    <option value="number" <# if (data.field_type === 'number') { #>selected<# } #>><?php esc_html_e('Number', 'event-rfq-manager'); ?></option>
+                    <option value="date" <# if (data.field_type === 'date') { #>selected<# } #>><?php esc_html_e('Date', 'event-rfq-manager'); ?></option>
+                </select>
+                <p class="description"><?php esc_html_e('Type of input field for each entry.', 'event-rfq-manager'); ?></p>
+            </div>
+
             <div class="erfq-setting-row erfq-inline-settings">
                 <div>
-                    <label for="erfq-field-min-rows"><?php esc_html_e('Min Rows', 'event-rfq-manager'); ?></label>
+                    <label for="erfq-field-min-rows"><?php esc_html_e('Min Entries', 'event-rfq-manager'); ?></label>
                     <input type="number" id="erfq-field-min-rows" class="erfq-field-setting" data-setting="min_rows" value="{{ data.min_rows }}" min="0">
                 </div>
                 <div>
-                    <label for="erfq-field-max-rows"><?php esc_html_e('Max Rows', 'event-rfq-manager'); ?></label>
+                    <label for="erfq-field-max-rows"><?php esc_html_e('Max Entries', 'event-rfq-manager'); ?></label>
                     <input type="number" id="erfq-field-max-rows" class="erfq-field-setting" data-setting="max_rows" value="{{ data.max_rows }}" min="1">
                 </div>
             </div>
@@ -598,34 +620,13 @@ if (!defined('ABSPATH')) {
                 <label for="erfq-field-add-text"><?php esc_html_e('Add Button Text', 'event-rfq-manager'); ?></label>
                 <input type="text" id="erfq-field-add-text" class="erfq-field-setting" data-setting="add_button_text" value="{{ data.add_button_text }}">
             </div>
-        </div>
 
-        <div class="erfq-setting-group">
-            <h4><?php esc_html_e('Sub-Fields', 'event-rfq-manager'); ?></h4>
-            <p class="description"><?php esc_html_e('Define fields that will repeat in each row.', 'event-rfq-manager'); ?></p>
-
-            <div class="erfq-sub-fields-list">
-                <# _.each(data.sub_fields || [], function(subField, index) { #>
-                <div class="erfq-sub-field-row" data-index="{{ index }}">
-                    <input type="text" class="erfq-sub-field-id" value="{{ subField.id }}" placeholder="<?php esc_attr_e('Field ID', 'event-rfq-manager'); ?>">
-                    <select class="erfq-sub-field-type">
-                        <option value="text" <# if (subField.type === 'text') { #>selected<# } #>><?php esc_html_e('Text', 'event-rfq-manager'); ?></option>
-                        <option value="email" <# if (subField.type === 'email') { #>selected<# } #>><?php esc_html_e('Email', 'event-rfq-manager'); ?></option>
-                        <option value="number" <# if (subField.type === 'number') { #>selected<# } #>><?php esc_html_e('Number', 'event-rfq-manager'); ?></option>
-                        <option value="select" <# if (subField.type === 'select') { #>selected<# } #>><?php esc_html_e('Select', 'event-rfq-manager'); ?></option>
-                        <option value="date" <# if (subField.type === 'date') { #>selected<# } #>><?php esc_html_e('Date', 'event-rfq-manager'); ?></option>
-                    </select>
-                    <input type="text" class="erfq-sub-field-label" value="{{ subField.label }}" placeholder="<?php esc_attr_e('Label', 'event-rfq-manager'); ?>">
-                    <button type="button" class="erfq-remove-sub-field" title="<?php esc_attr_e('Remove', 'event-rfq-manager'); ?>">
-                        <span class="dashicons dashicons-no-alt"></span>
-                    </button>
-                </div>
-                <# }); #>
+            <div class="erfq-setting-row">
+                <label>
+                    <input type="checkbox" class="erfq-field-setting" data-setting="required" <# if (data.required) { #>checked<# } #>>
+                    <?php esc_html_e('Required field', 'event-rfq-manager'); ?>
+                </label>
             </div>
-            <button type="button" class="button erfq-add-sub-field">
-                <span class="dashicons dashicons-plus"></span>
-                <?php esc_html_e('Add Sub-Field', 'event-rfq-manager'); ?>
-            </button>
         </div>
 
         <div class="erfq-setting-group">

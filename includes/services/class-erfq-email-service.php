@@ -279,8 +279,16 @@ class ERFQ_Email_Service {
             'Content-Type: text/html; charset=UTF-8',
         );
 
-        $from_name = get_bloginfo('name');
-        $from_email = get_option('admin_email');
+        // Get from name and email from settings
+        $from_name = get_option('erfq_from_name', get_bloginfo('name'));
+        $from_email = get_option('erfq_from_email', get_option('admin_email'));
+
+        // Allow form-specific override
+        $form_from_email = $form->get_setting('from_email');
+        if (!empty($form_from_email) && is_email($form_from_email)) {
+            $from_email = $form_from_email;
+        }
+
         $headers[] = 'From: ' . $from_name . ' <' . $from_email . '>';
 
         // Add Reply-To from submitter email

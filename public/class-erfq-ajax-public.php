@@ -49,29 +49,26 @@ class ERFQ_Ajax_Public {
         }
 
         // Process form data
-        $processor = new ERFQ_Form_Processor($form);
-        $result = $processor->process($_POST, $_FILES);
+        $processor = new ERFQ_Form_Processor();
+        $result = $processor->process($form_id, $_POST, $_FILES);
 
-        if (is_wp_error($result)) {
+        // Processor returns array with 'success' key
+        if (!$result['success']) {
             wp_send_json_error(array(
-                'message' => $result->get_error_message(),
-                'errors'  => $result->get_error_data(),
+                'message' => $result['message'],
+                'errors'  => isset($result['errors']) ? $result['errors'] : array(),
             ));
         }
 
-        // Get success message
-        $success_message = !empty($settings['success_message'])
-            ? $settings['success_message']
-            : __('Thank you for your submission!', 'event-rfq-manager');
-
+        // Build success response
         $response = array(
-            'message'  => $success_message,
-            'entry_id' => $result,
+            'message'  => $result['message'],
+            'entry_id' => $result['entry_id'],
         );
 
         // Add redirect URL if set
-        if (!empty($settings['redirect_url'])) {
-            $response['redirect'] = esc_url($settings['redirect_url']);
+        if (!empty($result['redirect'])) {
+            $response['redirect'] = $result['redirect'];
         }
 
         wp_send_json_success($response);

@@ -187,6 +187,14 @@ class ERFQ_Admin_Settings {
         check_admin_referer('erfq_settings_nonce');
 
         // Save each setting
+        if (isset($_POST['erfq_from_name'])) {
+            update_option('erfq_from_name', sanitize_text_field($_POST['erfq_from_name']));
+        }
+
+        if (isset($_POST['erfq_from_email'])) {
+            update_option('erfq_from_email', sanitize_email($_POST['erfq_from_email']));
+        }
+
         if (isset($_POST['erfq_default_email'])) {
             update_option('erfq_default_email', sanitize_email($_POST['erfq_default_email']));
         }

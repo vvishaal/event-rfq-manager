@@ -11,6 +11,8 @@ if (!defined('ABSPATH')) {
 
 // Get current settings
 $default_email = get_option('erfq_default_email', get_option('admin_email'));
+$from_email = get_option('erfq_from_email', get_option('admin_email'));
+$from_name = get_option('erfq_from_name', get_bloginfo('name'));
 $recaptcha_site_key = get_option('erfq_recaptcha_site_key', '');
 $recaptcha_secret_key = get_option('erfq_recaptcha_secret_key', '');
 $honeypot_enabled = get_option('erfq_honeypot_enabled', '1');
@@ -63,6 +65,29 @@ $global_settings = get_option('erfq_global_settings', array());
 
             <!-- Email Settings -->
             <div id="email" class="erfq-settings-section" style="display: none;">
+                <h2><?php esc_html_e('Sender Settings', 'event-rfq-manager'); ?></h2>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">
+                            <label for="erfq_from_name"><?php esc_html_e('From Name', 'event-rfq-manager'); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" name="erfq_from_name" id="erfq_from_name" class="regular-text" value="<?php echo esc_attr($from_name); ?>">
+                            <p class="description"><?php esc_html_e('Name that appears in the "From" field of notification emails.', 'event-rfq-manager'); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="erfq_from_email"><?php esc_html_e('From Email', 'event-rfq-manager'); ?></label>
+                        </th>
+                        <td>
+                            <input type="email" name="erfq_from_email" id="erfq_from_email" class="regular-text" value="<?php echo esc_attr($from_email); ?>">
+                            <p class="description"><?php esc_html_e('Email address used in the "From" header of notification emails. This should be an email from your domain.', 'event-rfq-manager'); ?></p>
+                        </td>
+                    </tr>
+                </table>
+
+                <h2><?php esc_html_e('Notification Settings', 'event-rfq-manager'); ?></h2>
                 <table class="form-table">
                     <tr>
                         <th scope="row">
@@ -70,7 +95,7 @@ $global_settings = get_option('erfq_global_settings', array());
                         </th>
                         <td>
                             <input type="email" name="erfq_default_email" id="erfq_default_email" class="regular-text" value="<?php echo esc_attr($default_email); ?>">
-                            <p class="description"><?php esc_html_e('Default email address for form submission notifications. Can be overridden per form.', 'event-rfq-manager'); ?></p>
+                            <p class="description"><?php esc_html_e('Email address that receives form submission notifications. Can be overridden per form.', 'event-rfq-manager'); ?></p>
                         </td>
                     </tr>
                     <tr>

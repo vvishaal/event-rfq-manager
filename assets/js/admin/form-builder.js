@@ -182,10 +182,11 @@
                 field.html_content = '<p>Enter your custom HTML content here.</p>';
                 field.label = 'HTML Content';
             } else if (type === 'repeater') {
-                field.sub_fields = [{id: 'item', type: 'text', label: 'Item'}];
-                field.min_rows = 0;
+                field.field_type = 'text';
+                field.min_rows = 1;
                 field.max_rows = 10;
-                field.add_button_text = '+ Add Row';
+                field.add_button_text = '+ Add More';
+                field.label = 'Items';
             }
 
             if (typeof index !== 'undefined') {
