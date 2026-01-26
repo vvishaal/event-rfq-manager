@@ -255,6 +255,15 @@ class ERFQ_Entry {
     }
 
     /**
+     * Get IP address (alias)
+     *
+     * @return string
+     */
+    public function get_ip() {
+        return $this->ip_address;
+    }
+
+    /**
      * Set IP address
      *
      * @param string $ip IP address
