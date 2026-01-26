@@ -12,61 +12,23 @@ if (!defined('ABSPATH')) {
 /**
  * Class ERFQ_Field_Section
  *
- * Section/heading field for grouping form fields
+ * Section/heading field for grouping form fields visually.
+ * This is a layout element that does not collect data.
  */
 class ERFQ_Field_Section extends ERFQ_Field_Type_Abstract {
 
-    /**
-     * Get field type identifier
-     *
-     * @return string
-     */
-    public function get_type() {
-        return 'section';
-    }
+    protected $type = 'section';
+    protected $name = 'Section';
+    protected $icon = 'dashicons-heading';
+    protected $category = 'layout';
+    protected $description = 'Add a section heading to organize your form.';
 
     /**
-     * Get field display name
-     *
-     * @return string
-     */
-    public function get_name() {
-        return __('Section', 'event-rfq-manager');
-    }
-
-    /**
-     * Get field icon
-     *
-     * @return string
-     */
-    public function get_icon() {
-        return 'dashicons-heading';
-    }
-
-    /**
-     * Get field category
-     *
-     * @return string
-     */
-    public function get_category() {
-        return 'layout';
-    }
-
-    /**
-     * Get field description
-     *
-     * @return string
-     */
-    public function get_description() {
-        return __('Add a section heading to organize your form.', 'event-rfq-manager');
-    }
-
-    /**
-     * Get field settings schema
+     * Get type-specific settings
      *
      * @return array
      */
-    public function get_settings_schema() {
+    protected function get_type_settings() {
         return array(
             'heading_tag' => array(
                 'type'    => 'select',
@@ -88,6 +50,31 @@ class ERFQ_Field_Section extends ERFQ_Field_Type_Abstract {
     }
 
     /**
+     * Override common settings - Section doesn't need most of them
+     *
+     * @return array
+     */
+    protected function get_common_settings() {
+        return array(
+            'label' => array(
+                'type'    => 'text',
+                'label'   => __('Section Title', 'event-rfq-manager'),
+                'default' => '',
+            ),
+            'description' => array(
+                'type'    => 'textarea',
+                'label'   => __('Description', 'event-rfq-manager'),
+                'default' => '',
+            ),
+            'css_class' => array(
+                'type'    => 'text',
+                'label'   => __('CSS Class', 'event-rfq-manager'),
+                'default' => '',
+            ),
+        );
+    }
+
+    /**
      * Render the field
      *
      * @param array $field_config Field configuration
@@ -96,27 +83,35 @@ class ERFQ_Field_Section extends ERFQ_Field_Type_Abstract {
      * @return string HTML output
      */
     public function render($field_config, $value = null) {
-        $id = isset($field_config['id']) ? esc_attr($field_config['id']) : '';
-        $label = isset($field_config['label']) ? $field_config['label'] : '';
-        $description = isset($field_config['description']) ? $field_config['description'] : '';
-        $tag = isset($field_config['heading_tag']) ? $field_config['heading_tag'] : 'h3';
-        $show_divider = isset($field_config['show_divider']) ? $field_config['show_divider'] : true;
-        $css_class = isset($field_config['css_class']) ? esc_attr($field_config['css_class']) : '';
+        $id = isset($field_config['id']) ? esc_attr($field_config['id']) : 'section-' . uniqid();
+        $label = isset($field_config['label']) ? trim($field_config['label']) : '';
+        $description = isset($field_config['description']) ? trim($field_config['description']) : '';
+        $tag = isset($field_config['heading_tag']) && in_array($field_config['heading_tag'], array('h2', 'h3', 'h4', 'h5'), true)
+            ? $field_config['heading_tag']
+            : 'h3';
 
-        $allowed_tags = array('h2', 'h3', 'h4', 'h5');
-        if (!in_array($tag, $allowed_tags, true)) {
-            $tag = 'h3';
+        // Handle show_divider - could be boolean, string "true"/"false", or "1"/"0"
+        $show_divider = true;
+        if (isset($field_config['show_divider'])) {
+            if (is_bool($field_config['show_divider'])) {
+                $show_divider = $field_config['show_divider'];
+            } else {
+                $show_divider = filter_var($field_config['show_divider'], FILTER_VALIDATE_BOOLEAN);
+            }
         }
 
-        $classes = 'erfq-section';
+        $css_class = isset($field_config['css_class']) ? trim($field_config['css_class']) : '';
+
+        // Build classes
+        $classes = array('erfq-section', 'erfq-field-wrapper', 'erfq-field-type-section');
         if ($show_divider) {
-            $classes .= ' erfq-section-divider';
+            $classes[] = 'erfq-section-divider';
         }
         if ($css_class) {
-            $classes .= ' ' . $css_class;
+            $classes[] = esc_attr($css_class);
         }
 
-        $html = '<div class="' . esc_attr($classes) . '" id="' . $id . '">';
+        $html = '<div class="' . esc_attr(implode(' ', $classes)) . '" id="' . esc_attr($id) . '">';
 
         if ($label) {
             $html .= '<' . $tag . ' class="erfq-section-title">' . esc_html($label) . '</' . $tag . '>';
