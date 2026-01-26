@@ -37,11 +37,22 @@
         initFieldPalette: function() {
             var self = this;
 
+            // Fix: Use proper helper function to create clone and keep original
             $('.erfq-palette-field').draggable({
-                helper: 'clone',
-                connectToSortable: '#erfq-fields-container',
+                helper: function() {
+                    return $(this).clone().addClass('erfq-drag-helper');
+                },
+                appendTo: 'body',
+                connectToSortable: '#erfq-fields-container, .erfq-section-dropzone',
                 revert: 'invalid',
-                cursor: 'grabbing'
+                cursor: 'grabbing',
+                zIndex: 10000,
+                start: function(e, ui) {
+                    $(this).addClass('erfq-dragging-source');
+                },
+                stop: function(e, ui) {
+                    $(this).removeClass('erfq-dragging-source');
+                }
             });
 
             $('.erfq-palette-field').on('click', function() {
@@ -65,6 +76,7 @@
             $('#erfq-fields-container').sortable({
                 handle: '.erfq-field-drag',
                 placeholder: 'erfq-sortable-placeholder',
+                items: '> .erfq-field-row',
                 receive: function(e, ui) {
                     var type = ui.item.data('type');
                     if (type && ui.item.hasClass('erfq-palette-field')) {
@@ -76,6 +88,46 @@
                 update: function(e, ui) {
                     if (!ui.sender) self.updateFieldOrder();
                 }
+            });
+        },
+
+        initSectionDropzones: function() {
+            var self = this;
+
+            // Initialize sortable for section dropzones
+            $('.erfq-section-dropzone').sortable({
+                handle: '.erfq-field-drag',
+                placeholder: 'erfq-sortable-placeholder erfq-section-placeholder',
+                connectWith: '.erfq-section-dropzone, #erfq-fields-container',
+                items: '> .erfq-field-row',
+                receive: function(e, ui) {
+                    var sectionId = $(this).closest('.erfq-field-row').data('field-id');
+                    var type = ui.item.data('type');
+
+                    // If it's a palette field being dropped
+                    if (type && ui.item.hasClass('erfq-palette-field')) {
+                        var index = ui.item.index();
+                        ui.item.remove();
+                        self.addFieldToSection(sectionId, type, index);
+                    } else {
+                        // It's an existing field being moved
+                        var fieldId = ui.item.data('field-id');
+                        if (fieldId) {
+                            self.moveFieldToSection(fieldId, sectionId, ui.item.index());
+                            ui.item.remove();
+                        }
+                    }
+                },
+                update: function(e, ui) {
+                    if (!ui.sender) {
+                        var sectionId = $(this).closest('.erfq-field-row').data('field-id');
+                        self.updateSectionFieldOrder(sectionId);
+                    }
+                }
+            }).droppable({
+                accept: '.erfq-palette-field',
+                hoverClass: 'erfq-dropzone-hover',
+                tolerance: 'pointer'
             });
         },
 
@@ -130,7 +182,7 @@
                 self.updateConditions();
             });
 
-            // Repeater sub-fields management
+            // Repeater sub-fields management (for simple repeater)
             $(document).on('click', '.erfq-add-sub-field', function() { self.addSubField(); });
             $(document).on('click', '.erfq-remove-sub-field', function() {
                 self.removeSubField($(this).closest('.erfq-sub-field-row').data('index'));
@@ -153,7 +205,7 @@
             });
         },
 
-        addField: function(type, index) {
+        addField: function(type, index, parentSectionId) {
             var fieldMeta = erfqAdmin.fieldTypes[type];
             if (!fieldMeta) return;
 
@@ -175,9 +227,13 @@
 
             // Add type-specific defaults
             if (type === 'section') {
-                field.heading_tag = 'h3';
-                field.show_divider = true;
                 field.label = 'Section Title';
+                field.description = '';
+                field.repeatable = true;
+                field.min_instances = 1;
+                field.max_instances = 10;
+                field.add_button_text = '+ Add Another';
+                field.sub_fields = [];
             } else if (type === 'html') {
                 field.html_content = '<p>Enter your custom HTML content here.</p>';
                 field.label = 'HTML Content';
@@ -198,6 +254,112 @@
             this.hasUnsavedChanges = true;
             this.renderFields();
             this.selectField(field.id);
+
+            return field.id;
+        },
+
+        addFieldToSection: function(sectionId, type, index) {
+            var section = this.getFieldById(sectionId);
+            if (!section || section.type !== 'section') return;
+
+            var fieldMeta = erfqAdmin.fieldTypes[type];
+            if (!fieldMeta) return;
+
+            // Don't allow sections inside sections
+            if (type === 'section') {
+                alert('Sections cannot be nested inside other sections.');
+                return;
+            }
+
+            var field = {
+                id: type + '_' + Date.now(),
+                type: type,
+                label: fieldMeta.label,
+                placeholder: '',
+                description: '',
+                required: false,
+                width: '100',
+                css_class: '',
+                options: fieldMeta.supports_options ? [{label: 'Option 1', value: 'option_1'}] : undefined
+            };
+
+            if (!section.sub_fields) section.sub_fields = [];
+
+            if (typeof index !== 'undefined' && index < section.sub_fields.length) {
+                section.sub_fields.splice(index, 0, field);
+            } else {
+                section.sub_fields.push(field);
+            }
+
+            this.hasUnsavedChanges = true;
+            this.renderFields();
+            this.selectField(field.id, sectionId);
+        },
+
+        moveFieldToSection: function(fieldId, sectionId, index) {
+            var field = this.getFieldById(fieldId);
+            if (!field) return;
+
+            // Don't move sections into sections
+            if (field.type === 'section') {
+                alert('Sections cannot be nested inside other sections.');
+                return;
+            }
+
+            var section = this.getFieldById(sectionId);
+            if (!section || section.type !== 'section') return;
+
+            // Remove from current location
+            this.removeFieldFromCurrentLocation(fieldId);
+
+            // Add to section
+            if (!section.sub_fields) section.sub_fields = [];
+
+            if (typeof index !== 'undefined' && index < section.sub_fields.length) {
+                section.sub_fields.splice(index, 0, field);
+            } else {
+                section.sub_fields.push(field);
+            }
+
+            this.hasUnsavedChanges = true;
+            this.renderFields();
+        },
+
+        removeFieldFromCurrentLocation: function(fieldId) {
+            // Check top-level fields
+            var index = this.formData.fields.findIndex(function(f) { return f.id === fieldId; });
+            if (index !== -1) {
+                this.formData.fields.splice(index, 1);
+                return true;
+            }
+
+            // Check inside sections
+            for (var i = 0; i < this.formData.fields.length; i++) {
+                var field = this.formData.fields[i];
+                if (field.type === 'section' && field.sub_fields) {
+                    var subIndex = field.sub_fields.findIndex(function(f) { return f.id === fieldId; });
+                    if (subIndex !== -1) {
+                        field.sub_fields.splice(subIndex, 1);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
+
+        updateSectionFieldOrder: function(sectionId) {
+            var self = this;
+            var section = this.getFieldById(sectionId);
+            if (!section || section.type !== 'section') return;
+
+            var newOrder = [];
+            $('[data-field-id="' + sectionId + '"] .erfq-section-dropzone > .erfq-field-row').each(function() {
+                var fieldId = $(this).data('field-id');
+                var field = self.getFieldById(fieldId, sectionId);
+                if (field) newOrder.push(field);
+            });
+            section.sub_fields = newOrder;
+            this.hasUnsavedChanges = true;
         },
 
         renderFields: function() {
@@ -212,28 +374,46 @@
             this.formData.fields.forEach(function(field) {
                 $container.append(self.renderFieldRow(field));
             });
+
+            // Re-initialize section dropzones after rendering
+            this.initSectionDropzones();
         },
 
-        renderFieldRow: function(field) {
+        renderFieldRow: function(field, isSubField) {
             var self = this;
             var fieldMeta = erfqAdmin.fieldTypes[field.type] || {};
             var template = wp.template('erfq-field-row');
             var $row = $(template($.extend({}, field, {
                 icon: fieldMeta.icon || 'dashicons-admin-generic',
-                type_label: fieldMeta.label || field.type
+                type_label: fieldMeta.label || field.type,
+                is_section: field.type === 'section',
+                is_sub_field: isSubField || false
             })));
 
             if (field.id === this.selectedFieldId) $row.addClass('erfq-selected');
 
-            $row.find('.erfq-field-header').on('click', function() { self.selectField(field.id); });
-            $row.find('.erfq-field-edit').on('click', function(e) { e.stopPropagation(); self.selectField(field.id); });
-            $row.find('.erfq-field-duplicate').on('click', function(e) { e.stopPropagation(); self.duplicateField(field.id); });
-            $row.find('.erfq-field-delete').on('click', function(e) {
+            $row.find('> .erfq-field-header').on('click', function() { self.selectField(field.id); });
+            $row.find('> .erfq-field-header .erfq-field-edit').on('click', function(e) { e.stopPropagation(); self.selectField(field.id); });
+            $row.find('> .erfq-field-header .erfq-field-duplicate').on('click', function(e) { e.stopPropagation(); self.duplicateField(field.id); });
+            $row.find('> .erfq-field-header .erfq-field-delete').on('click', function(e) {
                 e.stopPropagation();
                 if (confirm(erfqAdmin.i18n.confirmDelete)) self.deleteField(field.id);
             });
 
-            this.renderFieldPreview($row.find('.erfq-field-preview'), field);
+            // Render field preview
+            this.renderFieldPreview($row.find('> .erfq-field-content > .erfq-field-preview'), field);
+
+            // If this is a section, render its sub-fields
+            if (field.type === 'section') {
+                var $dropzone = $row.find('.erfq-section-dropzone');
+                if (field.sub_fields && field.sub_fields.length > 0) {
+                    field.sub_fields.forEach(function(subField) {
+                        $dropzone.append(self.renderFieldRow(subField, true));
+                    });
+                    $dropzone.find('.erfq-section-empty-msg').hide();
+                }
+            }
+
             return $row;
         },
 
@@ -258,10 +438,11 @@
                 case 'time': html = '<input type="text" disabled placeholder="Select time...">'; break;
                 case 'file': html = '<div class="erfq-file-preview"><span class="dashicons dashicons-upload"></span> Choose file</div>'; break;
                 case 'section':
-                    var tag = field.heading_tag || 'h3';
-                    html = '<div class="erfq-section-preview' + (field.show_divider ? ' erfq-has-divider' : '') + '">';
-                    html += '<' + tag + '>' + (field.label || 'Section Title') + '</' + tag + '>';
-                    if (field.description) html += '<p class="description">' + field.description + '</p>';
+                    html = '<div class="erfq-section-info">';
+                    html += '<span class="erfq-section-badge">' + (field.sub_fields ? field.sub_fields.length : 0) + ' field(s)</span>';
+                    if (field.repeatable) {
+                        html += ' <span class="erfq-repeatable-badge"><span class="dashicons dashicons-controls-repeat"></span> Repeatable</span>';
+                    }
                     html += '</div>';
                     break;
                 case 'html':
@@ -276,8 +457,8 @@
             $container.html(html);
         },
 
-        selectField: function(fieldId) {
-            var field = this.getFieldById(fieldId);
+        selectField: function(fieldId, parentSectionId) {
+            var field = this.getFieldById(fieldId, parentSectionId);
             if (!field) return;
 
             this.selectedFieldId = fieldId;
@@ -325,11 +506,33 @@
             this.selectField(fieldId);
         },
 
-        getFieldById: function(fieldId) {
-            return this.formData.fields.find(function(f) { return f.id === fieldId; });
+        getFieldById: function(fieldId, parentSectionId) {
+            // If parentSectionId is provided, search within that section
+            if (parentSectionId) {
+                var section = this.formData.fields.find(function(f) { return f.id === parentSectionId; });
+                if (section && section.sub_fields) {
+                    return section.sub_fields.find(function(f) { return f.id === fieldId; });
+                }
+            }
+
+            // Search top-level fields
+            var found = this.formData.fields.find(function(f) { return f.id === fieldId; });
+            if (found) return found;
+
+            // Search inside sections
+            for (var i = 0; i < this.formData.fields.length; i++) {
+                var field = this.formData.fields[i];
+                if (field.type === 'section' && field.sub_fields) {
+                    var subField = field.sub_fields.find(function(f) { return f.id === fieldId; });
+                    if (subField) return subField;
+                }
+            }
+
+            return null;
         },
 
         deleteField: function(fieldId) {
+            // Try to delete from top-level
             var index = this.formData.fields.findIndex(function(f) { return f.id === fieldId; });
             if (index !== -1) {
                 this.formData.fields.splice(index, 1);
@@ -340,17 +543,63 @@
                     $('.erfq-field-settings-content').hide();
                 }
                 this.renderFields();
+                return;
+            }
+
+            // Try to delete from sections
+            for (var i = 0; i < this.formData.fields.length; i++) {
+                var field = this.formData.fields[i];
+                if (field.type === 'section' && field.sub_fields) {
+                    var subIndex = field.sub_fields.findIndex(function(f) { return f.id === fieldId; });
+                    if (subIndex !== -1) {
+                        field.sub_fields.splice(subIndex, 1);
+                        this.hasUnsavedChanges = true;
+                        if (this.selectedFieldId === fieldId) {
+                            this.selectedFieldId = null;
+                            $('.erfq-no-field-selected').show();
+                            $('.erfq-field-settings-content').hide();
+                        }
+                        this.renderFields();
+                        return;
+                    }
+                }
             }
         },
 
         duplicateField: function(fieldId) {
             var field = this.getFieldById(fieldId);
             if (!field) return;
-            var index = this.formData.fields.findIndex(function(f) { return f.id === fieldId; });
+
             var newField = JSON.parse(JSON.stringify(field));
             newField.id = field.type + '_' + Date.now();
             newField.label = field.label + ' (Copy)';
-            this.formData.fields.splice(index + 1, 0, newField);
+
+            // If field has sub_fields, give them new IDs too
+            if (newField.sub_fields) {
+                newField.sub_fields = newField.sub_fields.map(function(sf) {
+                    sf.id = sf.type + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    return sf;
+                });
+            }
+
+            // Find where to insert
+            var index = this.formData.fields.findIndex(function(f) { return f.id === fieldId; });
+            if (index !== -1) {
+                this.formData.fields.splice(index + 1, 0, newField);
+            } else {
+                // Check if it's in a section
+                for (var i = 0; i < this.formData.fields.length; i++) {
+                    var parentField = this.formData.fields[i];
+                    if (parentField.type === 'section' && parentField.sub_fields) {
+                        var subIndex = parentField.sub_fields.findIndex(function(f) { return f.id === fieldId; });
+                        if (subIndex !== -1) {
+                            parentField.sub_fields.splice(subIndex + 1, 0, newField);
+                            break;
+                        }
+                    }
+                }
+            }
+
             this.hasUnsavedChanges = true;
             this.renderFields();
             this.selectField(newField.id);
@@ -359,7 +608,7 @@
         updateFieldOrder: function() {
             var self = this;
             var newOrder = [];
-            $('#erfq-fields-container .erfq-field-row').each(function() {
+            $('#erfq-fields-container > .erfq-field-row').each(function() {
                 var field = self.getFieldById($(this).data('field-id'));
                 if (field) newOrder.push(field);
             });
@@ -399,7 +648,8 @@
         renderConditionalRules: function(field) {
             var $container = $('.erfq-conditional-rules').empty();
             var rules = field.conditional_rules || [];
-            var otherFields = this.formData.fields.filter(function(f) { return f.id !== field.id; });
+            var allFields = this.getAllFieldsFlat();
+            var otherFields = allFields.filter(function(f) { return f.id !== field.id; });
             var template = wp.template('erfq-conditional-rule');
 
             rules.forEach(function(rule, index) {
@@ -407,11 +657,25 @@
             });
         },
 
+        getAllFieldsFlat: function() {
+            var fields = [];
+            this.formData.fields.forEach(function(field) {
+                if (field.type !== 'section') {
+                    fields.push(field);
+                }
+                if (field.sub_fields) {
+                    fields = fields.concat(field.sub_fields);
+                }
+            });
+            return fields;
+        },
+
         addCondition: function() {
             var field = this.getFieldById(this.selectedFieldId);
             if (!field) return;
             if (!field.conditional_rules) field.conditional_rules = [];
-            var otherFields = this.formData.fields.filter(function(f) { return f.id !== field.id; });
+            var allFields = this.getAllFieldsFlat();
+            var otherFields = allFields.filter(function(f) { return f.id !== field.id; });
             if (otherFields.length === 0) { alert('Add more fields first.'); return; }
             field.conditional_rules.push({ field: otherFields[0].id, operator: 'equals', value: '' });
             this.hasUnsavedChanges = true;

@@ -412,13 +412,18 @@ if (!defined('ABSPATH')) {
 
     <!-- Field Row Template -->
     <script type="text/template" id="tmpl-erfq-field-row">
-        <div class="erfq-field-row" data-field-id="{{ data.id }}" data-field-type="{{ data.type }}">
+        <div class="erfq-field-row<# if (data.is_section) { #> erfq-section-field<# } #><# if (data.is_sub_field) { #> erfq-sub-field<# } #>" data-field-id="{{ data.id }}" data-field-type="{{ data.type }}">
             <div class="erfq-field-header">
                 <span class="erfq-field-drag dashicons dashicons-menu"></span>
                 <span class="erfq-field-icon dashicons {{ data.icon }}"></span>
                 <span class="erfq-field-label">{{ data.label }}</span>
                 <# if (data.required) { #><span class="erfq-required">*</span><# } #>
                 <span class="erfq-field-type">{{ data.type_label }}</span>
+                <# if (data.is_section && data.repeatable) { #>
+                <span class="erfq-section-repeatable-indicator" title="<?php esc_attr_e('Repeatable Section', 'event-rfq-manager'); ?>">
+                    <span class="dashicons dashicons-controls-repeat"></span>
+                </span>
+                <# } #>
                 <div class="erfq-field-actions-inline">
                     <button type="button" class="erfq-field-edit" title="<?php esc_attr_e('Edit', 'event-rfq-manager'); ?>">
                         <span class="dashicons dashicons-edit"></span>
@@ -431,8 +436,19 @@ if (!defined('ABSPATH')) {
                     </button>
                 </div>
             </div>
-            <div class="erfq-field-preview">
-                <!-- Field preview rendered here -->
+            <div class="erfq-field-content">
+                <div class="erfq-field-preview">
+                    <!-- Field preview rendered here -->
+                </div>
+                <# if (data.is_section) { #>
+                <div class="erfq-section-dropzone">
+                    <p class="erfq-section-empty-msg">
+                        <span class="dashicons dashicons-plus-alt"></span>
+                        <?php esc_html_e('Drag fields here to add to this section', 'event-rfq-manager'); ?>
+                    </p>
+                    <!-- Sub-fields rendered here by JS -->
+                </div>
+                <# } #>
             </div>
         </div>
     </script>
@@ -476,22 +492,33 @@ if (!defined('ABSPATH')) {
                 <label for="erfq-field-description"><?php esc_html_e('Description', 'event-rfq-manager'); ?></label>
                 <textarea id="erfq-field-description" class="erfq-field-setting" data-setting="description" rows="2">{{ data.description }}</textarea>
             </div>
+        </div>
 
-            <div class="erfq-setting-row">
-                <label for="erfq-field-heading-tag"><?php esc_html_e('Heading Tag', 'event-rfq-manager'); ?></label>
-                <select id="erfq-field-heading-tag" class="erfq-field-setting" data-setting="heading_tag">
-                    <option value="h2" <# if (data.heading_tag === 'h2') { #>selected<# } #>>H2</option>
-                    <option value="h3" <# if (data.heading_tag === 'h3') { #>selected<# } #>>H3</option>
-                    <option value="h4" <# if (data.heading_tag === 'h4') { #>selected<# } #>>H4</option>
-                    <option value="h5" <# if (data.heading_tag === 'h5') { #>selected<# } #>>H5</option>
-                </select>
-            </div>
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Repeater Settings', 'event-rfq-manager'); ?></h4>
+            <p class="description"><?php esc_html_e('Allow users to add multiple instances of this section on the frontend.', 'event-rfq-manager'); ?></p>
 
             <div class="erfq-setting-row">
                 <label>
-                    <input type="checkbox" class="erfq-field-setting" data-setting="show_divider" <# if (data.show_divider) { #>checked<# } #>>
-                    <?php esc_html_e('Show divider line', 'event-rfq-manager'); ?>
+                    <input type="checkbox" class="erfq-field-setting" data-setting="repeatable" <# if (data.repeatable) { #>checked<# } #>>
+                    <?php esc_html_e('Make this section repeatable', 'event-rfq-manager'); ?>
                 </label>
+            </div>
+
+            <div class="erfq-setting-row erfq-inline-settings">
+                <div>
+                    <label for="erfq-field-min-instances"><?php esc_html_e('Min Instances', 'event-rfq-manager'); ?></label>
+                    <input type="number" id="erfq-field-min-instances" class="erfq-field-setting" data-setting="min_instances" value="{{ data.min_instances || 1 }}" min="1" max="20">
+                </div>
+                <div>
+                    <label for="erfq-field-max-instances"><?php esc_html_e('Max Instances', 'event-rfq-manager'); ?></label>
+                    <input type="number" id="erfq-field-max-instances" class="erfq-field-setting" data-setting="max_instances" value="{{ data.max_instances || 10 }}" min="1" max="50">
+                </div>
+            </div>
+
+            <div class="erfq-setting-row">
+                <label for="erfq-field-add-button-text"><?php esc_html_e('Add Button Text', 'event-rfq-manager'); ?></label>
+                <input type="text" id="erfq-field-add-button-text" class="erfq-field-setting" data-setting="add_button_text" value="{{ data.add_button_text || '+ Add Another' }}">
             </div>
         </div>
 
@@ -501,6 +528,17 @@ if (!defined('ABSPATH')) {
             <div class="erfq-setting-row">
                 <label for="erfq-field-css"><?php esc_html_e('CSS Class', 'event-rfq-manager'); ?></label>
                 <input type="text" id="erfq-field-css" class="erfq-field-setting" data-setting="css_class" value="{{ data.css_class }}">
+            </div>
+        </div>
+
+        <div class="erfq-setting-group">
+            <h4><?php esc_html_e('Section Fields', 'event-rfq-manager'); ?></h4>
+            <p class="description">
+                <?php esc_html_e('Drag fields from the left panel into the section area in the form builder to add them.', 'event-rfq-manager'); ?>
+            </p>
+            <div class="erfq-section-fields-count">
+                <span class="dashicons dashicons-forms"></span>
+                <strong>{{ (data.sub_fields || []).length }}</strong> <?php esc_html_e('field(s) in this section', 'event-rfq-manager'); ?>
             </div>
         </div>
 

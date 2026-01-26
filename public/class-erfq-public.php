@@ -48,6 +48,14 @@ class ERFQ_Public {
             true
         );
 
+        wp_enqueue_script(
+            'erfq-section-repeater',
+            ERFQ_PLUGIN_URL . 'assets/js/public/section-repeater.js',
+            array('jquery'),
+            ERFQ_VERSION,
+            true
+        );
+
         // Localize scripts
         wp_localize_script('erfq-form-handler', 'erfqPublic', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -61,6 +69,8 @@ class ERFQ_Public {
                 'invalidPhone'     => __('Please enter a valid phone number.', 'event-rfq-manager'),
                 'fileTooLarge'     => __('File is too large.', 'event-rfq-manager'),
                 'invalidFileType'  => __('File type not allowed.', 'event-rfq-manager'),
+                'maxEntriesReached' => __('Maximum entries reached.', 'event-rfq-manager'),
+                'minEntriesRequired' => __('Minimum entries required.', 'event-rfq-manager'),
             ),
         ));
 

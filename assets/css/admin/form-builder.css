@@ -943,3 +943,176 @@
     line-height: 1.5;
     background: #f9f9f9;
 }
+
+/* ========================================
+   Section Container & Dropzone
+   ======================================== */
+
+.erfq-section-field {
+    border: 2px solid #2271b1;
+    background: #f8fbff;
+}
+
+.erfq-section-field > .erfq-field-header {
+    background: #e8f0fe;
+    border-bottom: 1px solid #c5d9f0;
+}
+
+.erfq-section-field > .erfq-field-content {
+    padding: 0;
+}
+
+.erfq-section-field > .erfq-field-content > .erfq-field-preview {
+    padding: 8px 12px;
+    background: #f0f6fc;
+    border-bottom: 1px solid #e0e8f0;
+}
+
+.erfq-section-dropzone {
+    min-height: 80px;
+    margin: 10px;
+    padding: 15px;
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.erfq-section-dropzone:hover,
+.erfq-section-dropzone.erfq-dropzone-hover {
+    border-color: #2271b1;
+    background: #f8fbff;
+}
+
+.erfq-section-empty-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #999;
+    text-align: center;
+    font-size: 12px;
+}
+
+.erfq-section-empty-msg .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+    opacity: 0.5;
+}
+
+/* Sub-fields inside sections */
+.erfq-section-dropzone .erfq-field-row {
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+}
+
+.erfq-section-dropzone .erfq-field-row:last-child {
+    margin-bottom: 0;
+}
+
+.erfq-sub-field {
+    background: #fff;
+}
+
+.erfq-sub-field > .erfq-field-header {
+    padding: 8px 10px;
+    background: #fafafa;
+}
+
+.erfq-sub-field .erfq-field-preview {
+    padding: 8px 10px;
+}
+
+/* Section placeholder in dropzone */
+.erfq-section-placeholder {
+    border: 2px dashed #2271b1 !important;
+    background: #f0f6fc !important;
+    height: 50px !important;
+}
+
+/* Section Info Badge */
+.erfq-section-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.erfq-section-badge {
+    background: #e0e0e0;
+    padding: 3px 10px;
+    border-radius: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+.erfq-repeatable-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #e8f0fe;
+    padding: 3px 10px;
+    border-radius: 12px;
+    color: #2271b1;
+    font-weight: 500;
+}
+
+.erfq-repeatable-badge .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.erfq-section-repeatable-indicator {
+    color: #2271b1;
+    margin-right: 5px;
+}
+
+.erfq-section-repeatable-indicator .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Section Fields Count in Settings */
+.erfq-section-fields-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #f6f7f7;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #666;
+}
+
+.erfq-section-fields-count .dashicons {
+    color: #2271b1;
+}
+
+/* ========================================
+   Drag Helper & States
+   ======================================== */
+
+.erfq-drag-helper {
+    opacity: 0.9;
+    transform: rotate(2deg);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    z-index: 10000;
+}
+
+.erfq-dragging-source {
+    opacity: 0.5;
+}
+
+.erfq-sortable-placeholder {
+    border: 2px dashed #2271b1;
+    background: #f0f6fc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    height: 60px;
+    visibility: visible !important;
+}

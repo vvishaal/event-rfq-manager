@@ -609,9 +609,189 @@
 }
 
 /* ========================================
-   Section Field
+   Section Container Field (Repeatable)
    ======================================== */
 
+.erfq-section-container {
+    margin: 25px 0;
+    padding: 0;
+}
+
+.erfq-section-container:first-child {
+    margin-top: 0;
+}
+
+.erfq-section-header {
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.erfq-section-title {
+    margin: 0 0 6px;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.erfq-section-description {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Section Instances */
+.erfq-section-instances {
+    margin-bottom: 15px;
+}
+
+.erfq-section-instance {
+    position: relative;
+    margin-bottom: 15px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.erfq-section-instance:last-child {
+    margin-bottom: 0;
+}
+
+.erfq-section-repeatable .erfq-section-instance {
+    border-left: 4px solid #2563eb;
+}
+
+/* Instance Header */
+.erfq-instance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.erfq-instance-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2563eb;
+    background: #eff6ff;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.erfq-instance-remove {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #666;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
+    transition: all 0.15s ease;
+}
+
+.erfq-instance-remove:hover {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.erfq-instance-remove:disabled,
+.erfq-instance-remove.erfq-btn-disabled {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.erfq-instance-remove:disabled:hover,
+.erfq-instance-remove.erfq-btn-disabled:hover {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #ccc;
+}
+
+/* Instance Fields */
+.erfq-instance-fields {
+    /* Contains the actual form fields */
+}
+
+.erfq-instance-fields .erfq-form-row {
+    margin-bottom: 15px;
+}
+
+.erfq-instance-fields .erfq-form-row:last-child {
+    margin-bottom: 0;
+}
+
+.erfq-no-fields-msg {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    padding: 20px;
+    background: #fff;
+    border: 1px dashed #e5e7eb;
+    border-radius: 4px;
+    margin: 0;
+}
+
+/* Add Button */
+.erfq-section-add-wrapper {
+    text-align: center;
+}
+
+.erfq-section-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2563eb;
+    background: #fff;
+    border: 2px dashed #2563eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.erfq-section-add-btn:hover {
+    background: #eff6ff;
+    border-style: solid;
+}
+
+.erfq-section-add-btn:disabled,
+.erfq-section-add-btn.erfq-btn-disabled {
+    color: #ccc;
+    border-color: #e5e7eb;
+    cursor: not-allowed;
+}
+
+.erfq-section-add-btn:disabled:hover,
+.erfq-section-add-btn.erfq-btn-disabled:hover {
+    background: #fff;
+    border-style: dashed;
+}
+
+/* Template (hidden) */
+.erfq-section-template,
+.erfq-instance-template {
+    display: none !important;
+}
+
+/* Legacy Section (non-container) */
 .erfq-section {
     margin: 25px 0 20px;
     padding-bottom: 10px;
@@ -623,26 +803,6 @@
 
 .erfq-section-divider {
     border-bottom: 1px solid #e5e7eb;
-}
-
-.erfq-section-title {
-    margin: 0 0 8px;
-    padding: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #1a1a1a;
-}
-
-.erfq-section-title.h2 { font-size: 22px; }
-.erfq-section-title.h3 { font-size: 18px; }
-.erfq-section-title.h4 { font-size: 16px; }
-.erfq-section-title.h5 { font-size: 14px; }
-
-.erfq-section-description {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
-    line-height: 1.5;
 }
 
 /* ========================================
